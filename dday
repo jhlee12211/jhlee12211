@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recurring D-Day Widget</title>
+    <style>
+        body {
+            background-image: url('background.png'); /* 배경 이미지 경로 설정 */
+            background-size: cover;
+            background-position: center;
+            font-family: 'Arial', sans-serif;
+            color: #fff; /* 폰트 색상을 흰색으로 설정 */
+        }
+        .day-container {
+            text-align: center;
+            position: relative;
+            margin-top: 100px; /* 말풍선이 이미지 위에 오게 조절 */
+        }
+        .day-image {
+            max-width: 100px;
+            max-height: 100px;
+            display: block;
+            margin: 0 auto;
+        }
+        .speech-bubble {
+            position: absolute;
+            bottom: 120px; /* 말풍선 위치 조절 */
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.7); /* 말풍선 배경색 및 투명도 설정 */
+            border-radius: 10px;
+            width: 300px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="day-container">
+    <div class="speech-bubble" id="speechBubble"></div>
+    <div id="dDay"></div>
+    <img id="dDayImage" class="day-image" src="" alt="D-Day Image">
+</div>
+
+<script>
+    const dDayDate = new Date();
+    dDayDate.setDate(15);
+
+    const exampleImage = 'example.png';
+    const example1Image = 'example1.png';
+
+    const today = new Date();
+    const daysLeft = Math.ceil((dDayDate - today) / (1000 * 60 * 60 * 24));
+
+    document.getElementById('dDay').innerText = `D-${daysLeft}`;
+    document.getElementById('dDayImage').src = daysLeft >= 0 ? exampleImage : example1Image;
+
+    // 말풍선에 날짜 정보 추가
+    const speechBubble = document.getElementById('speechBubble');
+    const daysPassed = Math.ceil((today - dDayDate) / (1000 * 60 * 60 * 24));
+    const daysRemaining = daysLeft >= 0 ? daysLeft : 0;
+    speechBubble.innerText = `지금까지 ${daysPassed}일 지났어. 앞으로 남은 날짜는 ${daysRemaining}일이야!`;
+</script>
+
+</body>
+</html>
