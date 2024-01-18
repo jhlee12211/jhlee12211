@@ -6,33 +6,55 @@
     <title>Recurring D-Day Widget</title>
     <style>
         body {
-            background-image: url('background.png'); /* 배경 이미지 경로 설정 */
+            background-image: url('background.jpg');
             background-size: cover;
             background-position: center;
             font-family: 'Arial', sans-serif;
-            color: #fff; /* 폰트 색상을 흰색으로 설정 */
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
         }
         .day-container {
             text-align: center;
             position: relative;
-            margin-top: 100px; /* 말풍선이 이미지 위에 오게 조절 */
         }
         .day-image {
             max-width: 100px;
             max-height: 100px;
             display: block;
             margin: 0 auto;
+            margin-top: 20px;
         }
         .speech-bubble {
             position: absolute;
-            bottom: 120px; /* 말풍선 위치 조절 */
+            bottom: 10px;
             left: 50%;
             transform: translateX(-50%);
             padding: 10px;
-            background-color: rgba(0, 0, 0, 0.7); /* 말풍선 배경색 및 투명도 설정 */
+            background-color: rgba(0, 0, 0, 0.7);
             border-radius: 10px;
             width: 300px;
             text-align: center;
+        }
+        .calendar-container {
+            margin-top: 20px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 300px;
+            margin: 0 auto;
+        }
+        th, td {
+            border: 1px solid #fff;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #fff;
         }
     </style>
 </head>
@@ -44,12 +66,30 @@
     <img id="dDayImage" class="day-image" src="" alt="D-Day Image">
 </div>
 
+<div class="calendar-container">
+    <h2>Calendar</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Sun</th>
+                <th>Mon</th>
+                <th>Tue</th>
+                <th>Wed</th>
+                <th>Thu</th>
+                <th>Fri</th>
+                <th>Sat</th>
+            </tr>
+        </thead>
+        <tbody id="calendarBody"></tbody>
+    </table>
+</div>
+
 <script>
     const dDayDate = new Date();
     dDayDate.setDate(15);
 
-    const exampleImage = 'example.png';
-    const example1Image = 'example1.png';
+    const exampleImage = 'example.jpg';
+    const example1Image = 'example1.jpg';
 
     const today = new Date();
     const daysLeft = Math.ceil((dDayDate - today) / (1000 * 60 * 60 * 24));
@@ -57,11 +97,26 @@
     document.getElementById('dDay').innerText = `D-${daysLeft}`;
     document.getElementById('dDayImage').src = daysLeft >= 0 ? exampleImage : example1Image;
 
-    // 말풍선에 날짜 정보 추가
     const speechBubble = document.getElementById('speechBubble');
     const daysPassed = Math.ceil((today - dDayDate) / (1000 * 60 * 60 * 24));
     const daysRemaining = daysLeft >= 0 ? daysLeft : 0;
     speechBubble.innerText = `지금까지 ${daysPassed}일 지났어. 앞으로 남은 날짜는 ${daysRemaining}일이야!`;
+
+    // Calendar 생성
+    const calendarBody = document.getElementById('calendarBody');
+    const currentMonthDays = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+    const firstDayIndex = new Date(today.getFullYear(), today.getMonth(), 1).getDay();
+
+    for (let i = 1; i <= currentMonthDays + firstDayIndex; i++) {
+        const day = i - firstDayIndex;
+        if (i % 7 === 1) calendarBody.innerHTML += '<tr>'; // 일요일마다 새로운 행 시작
+        if (i >= firstDayIndex) {
+            calendarBody.innerHTML += `<td>${day > 0 ? day : ''}</td>`;
+        } else {
+            calendarBody.innerHTML += '<td></td>';
+        }
+        if (i % 7 === 0) calendarBody.innerHTML += '</tr>'; // 토요일마다 행 종료
+    }
 </script>
 
 </body>
