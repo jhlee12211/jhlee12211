@@ -6,13 +6,13 @@
     <title>Recurring D-Day Widget</title>
     <style>
         body {
-            background-image: url('background.png');
+            background-image: url('background.jpg');
             background-size: cover;
             background-position: center;
             font-family: 'Arial', sans-serif;
             color: #fff;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
             height: 100vh;
             margin: 0;
@@ -20,19 +20,15 @@
         .day-container {
             text-align: center;
             position: relative;
+            margin-top: 20px;
         }
         .day-image {
             max-width: 100px;
             max-height: 100px;
-            display: block;
-            margin: 0 auto;
             margin-top: 20px;
         }
         .speech-bubble {
-            position: absolute;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
+            margin-top: 10px;
             padding: 10px;
             background-color: rgba(0, 0, 0, 0.7);
             border-radius: 10px;
@@ -45,7 +41,6 @@
         table {
             border-collapse: collapse;
             width: 300px;
-            margin: 0 auto;
         }
         th, td {
             border: 1px solid #fff;
@@ -88,8 +83,8 @@
     const dDayDate = new Date();
     dDayDate.setDate(15);
 
-    const exampleImage = 'example.png';
-    const example1Image = 'example1.png';
+    const exampleImage = 'example.jpg';
+    const example1Image = 'example1.jpg';
 
     const today = new Date();
     const daysLeft = Math.ceil((dDayDate - today) / (1000 * 60 * 60 * 24));
@@ -107,15 +102,20 @@
     const currentMonthDays = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
     const firstDayIndex = new Date(today.getFullYear(), today.getMonth(), 1).getDay();
 
-    for (let i = 1; i <= currentMonthDays + firstDayIndex; i++) {
-        const day = i - firstDayIndex;
-        if (i % 7 === 1) calendarBody.innerHTML += '<tr>'; // 일요일마다 새로운 행 시작
-        if (i >= firstDayIndex) {
-            calendarBody.innerHTML += `<td>${day > 0 ? day : ''}</td>`;
-        } else {
-            calendarBody.innerHTML += '<td></td>';
+    let dayCount = 1;
+    for (let i = 0; i < 6; i++) {
+        const row = document.createElement('tr');
+        for (let j = 0; j < 7; j++) {
+            const cell = document.createElement('td');
+            if (i === 0 && j < firstDayIndex) {
+                // 빈 셀로 채우기
+            } else if (dayCount <= currentMonthDays) {
+                cell.textContent = dayCount;
+                dayCount++;
+            }
+            row.appendChild(cell);
         }
-        if (i % 7 === 0) calendarBody.innerHTML += '</tr>'; // 토요일마다 행 종료
+        calendarBody.appendChild(row);
     }
 </script>
 
